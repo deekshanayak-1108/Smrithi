@@ -27,7 +27,12 @@ class VoiceEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.json()["languages"],
-            [{"code": "en", "name": "English"}, {"code": "as", "name": "Assamese"}],
+            [
+                {"code": "en", "name": "English"},
+                {"code": "as", "name": "Assamese"},
+                {"code": "hi", "name": "Hindi"},
+                {"code": "kn", "name": "Kannada"},
+            ],
         )
 
     def test_english_prompt_prefers_existing_audio(self) -> None:
@@ -52,6 +57,28 @@ class VoiceEndpointTests(unittest.TestCase):
         self.assertIsNone(payload["audio_url"])
         self.assertTrue(payload["tts_fallback_required"])
 
+    def test_hindi_prompt_uses_tts_fallback_without_audio(self) -> None:
+        response = self.client.get("/voice/prompt/hi/welcome")
+        payload = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assert_prompt_shape(payload)
+        self.assertEqual(payload["text"], "स्मृति में आपका स्वागत है।")
+        self.assertFalse(payload["audio_available"])
+        self.assertIsNone(payload["audio_url"])
+        self.assertTrue(payload["tts_fallback_required"])
+
+    def test_kannada_prompt_uses_tts_fallback_without_audio(self) -> None:
+        response = self.client.get("/voice/prompt/kn/welcome")
+        payload = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assert_prompt_shape(payload)
+        self.assertEqual(payload["text"], "ಸ್ಮೃತಿಗೆ ಸ್ವಾಗತ.")
+        self.assertFalse(payload["audio_available"])
+        self.assertIsNone(payload["audio_url"])
+        self.assertTrue(payload["tts_fallback_required"])
+
     def test_existing_english_audio_is_served(self) -> None:
         response = self.client.get("/voice/audio/en/welcome")
 
@@ -68,7 +95,7 @@ class VoiceEndpointTests(unittest.TestCase):
         self.assertEqual(payload["error"], "Voice content not found")
 
     def test_unsupported_language_returns_consistent_404_response(self) -> None:
-        response = self.client.get("/voice/prompt/hi/welcome")
+        response = self.client.get("/voice/prompt/fr/welcome")
         payload = response.json()
 
         self.assertEqual(response.status_code, 404)

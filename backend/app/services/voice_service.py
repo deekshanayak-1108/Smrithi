@@ -12,6 +12,8 @@ AUDIO_DIR = BASE_DIR / "audio"
 SUPPORTED_LANGUAGES = {
     "en": "English",
     "as": "Assamese",
+    "hi": "Hindi",
+    "kn": "Kannada",
 }
 
 
