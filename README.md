@@ -1,14 +1,303 @@
-# SMRITHI – Backend REST API
-### AI-Based Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in the North Eastern Region (NER)
+# SMRITHI – AI-Powered Elderly Care Platform
+### Cognitive Gaming and Memory Assistance Platform for Elderly Dementia Patients in North East India
 **Smart India Hackathon (SIH) Problem Statement:** `SIH26003`
 
 ---
 
 ## 📌 Project Overview
 
-**SMRITHI** is an AI-driven, culturally grounded cognitive stimulation and memory assistance backend platform engineered specifically for elderly dementia patients in North East India.
+**SMRITHI** is an AI-driven, culturally grounded cognitive stimulation and memory assistance platform engineered specifically for elderly dementia patients in North East India. This is a **full-stack monorepo** containing both the **REST API Backend** and **React Frontend**.
 
-This repository contains the **REST API Backend**, designed to be consumed by clinical portals, mobile caregiver applications, or edge touch devices. It is completely independent and testable through Postman, Swagger UI, and cURL.
+- **Backend:** FastAPI-based REST API with MongoDB, ML-powered adaptive difficulty, and multilingual support
+- **Frontend:** React + Vite modern SPA with responsive design, offline support, and real-time synchronization
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** 18+ (for frontend)
+- **Python** 3.10+ (for backend)
+- **MongoDB** (local or Atlas URI)
+- **npm** or **yarn** package manager
+
+### Installation & Setup
+
+#### 1. **Clone Repository**
+```bash
+git clone https://github.com/deekshanayak-1108/Smrithi.git
+cd Smrithi
+```
+
+#### 2. **Install All Dependencies**
+```bash
+npm run install:all
+```
+This will install:
+- Root node modules (for concurrent task running)
+- Backend Python dependencies
+- Frontend node modules
+
+#### 3. **Environment Configuration**
+Copy `.env.example` to `.env` in the root directory and configure:
+
+```bash
+cp .env.example .env
+```
+
+**Backend settings (.env):**
+- `MONGODB_URI` - MongoDB connection string
+- `PORT` - Backend API port (default: 8000)
+- `SECRET_KEY` - JWT secret key
+- `GEMINI_API_KEY` / `OPENAI_API_KEY` - Optional for AI report generation
+
+**Frontend settings (.env or .env.local):**
+- `VITE_API_BASE_URL` - Backend API URL (default: http://localhost:8000)
+
+#### 4. **Run Full Stack**
+```bash
+npm run dev
+```
+
+This will start:
+- ✅ **Backend API** on `http://localhost:8000`
+- ✅ **Frontend App** on `http://localhost:5173`
+- ✅ **Swagger Docs** on `http://localhost:8000/docs`
+
+---
+
+## 📂 Project Structure
+
+```
+smrithi/  (monorepo root)
+│
+├── backend/                        # FastAPI REST API
+│   ├── app/
+│   │   ├── main.py                # Application Entry Point
+│   │   ├── core/
+│   │   │   └── config.py          # Configuration & Environment Settings
+│   │   ├── database/
+│   │   │   └── db.py              # MongoDB Manager + In-Memory Fallback
+│   │   ├── models/                # Database Document Models
+│   │   ├── schemas/               # Pydantic Request/Response Validation
+│   │   ├── routes/                # REST API Endpoints
+│   │   │   ├── auth.py            # JWT Authentication & RBAC
+│   │   │   ├── patients.py        # Patient Profiles & MMSE Tracking
+│   │   │   ├── caregivers.py      # Caregiver Management
+│   │   │   ├── games.py           # Cognitive Games Engine
+│   │   │   ├── adaptive.py        # Adaptive Difficulty System
+│   │   │   ├── progress.py        # Progress Analytics
+│   │   │   ├── voice.py           # TTS Voice Service
+│   │   │   ├── reminders.py       # Reminder System
+│   │   │   └── reports.py         # AI Clinical Reports
+│   │   ├── services/              # Business Logic & Integrations
+│   │   ├── ai/
+│   │   │   ├── adaptive/          # ML-based Adaptive Engine
+│   │   │   └── ai_report_service.py # Report Generator
+│   │   ├── middleware/            # Auth Guards & Error Handlers
+│   │   └── utils/                 # Helper Functions
+│   ├── requirements.txt           # Python Dependencies
+│   └── tests/                     # Backend Tests
+│
+├── frontend/                       # React + Vite SPA
+│   ├── src/
+│   │   ├── main.jsx              # Entry Point
+│   │   ├── App.jsx               # Root Component
+│   │   ├── components/           # Reusable Components
+│   │   │   ├── Layout.jsx
+│   │   │   ├── TopNav.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── BottomNav.jsx
+│   │   │   └── ...
+│   │   ├── pages/                # Page Components
+│   │   │   ├── Home.jsx
+│   │   │   ├── Games.jsx
+│   │   │   ├── CaregiverDashboard.jsx
+│   │   │   ├── ActivityHub.jsx
+│   │   │   └── ...
+│   │   ├── utils/                # Helper Functions
+│   │   │   └── audio.js          # Audio Utilities
+│   │   └── assets/               # Static Assets
+│   ├── public/                   # Public Static Files
+│   │   └── images/               # Game Assets
+│   ├── vite.config.js            # Vite Configuration with API Proxy
+│   ├── package.json              # Frontend Dependencies
+│   └── .env.example              # Frontend Environment Template
+│
+├── package.json                   # Root Scripts for Monorepo
+├── .env.example                   # Full-Stack Environment Template
+└── README.md                      # This File
+
+```
+
+---
+
+## 🎮 Available Scripts
+
+### Root-Level Commands
+```bash
+npm run dev                        # Run both backend & frontend concurrently
+npm run build                      # Build both backend & frontend
+npm run install:all               # Install all dependencies (root, backend, frontend)
+```
+
+### Backend Commands
+```bash
+npm run backend:dev               # Start backend API with hot-reload
+npm run backend:build             # Prepare backend for production
+npm run backend:install           # Install Python dependencies
+```
+
+### Frontend Commands
+```bash
+npm run frontend:dev              # Start frontend dev server
+npm run frontend:build            # Build frontend for production
+npm run frontend:install          # Install node modules
+```
+
+---
+
+## 🔌 API Integration
+
+### Frontend → Backend Communication
+
+The frontend is configured to communicate with the backend via:
+- **Development:** Vite proxy routes `/api/*` to `http://localhost:8000`
+- **Production:** Set `VITE_API_BASE_URL` environment variable
+
+### Example API Call (Frontend)
+```javascript
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+// Login
+const response = await axios.post(`${API_BASE}/auth/login`, {
+  username: 'caregiver@example.com',
+  password: 'password'
+});
+
+// Get Patient List
+const patients = await axios.get(`${API_BASE}/patients`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+```
+
+### API Endpoints (Backend)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/login` | Caregiver Login |
+| GET | `/patients` | List Patients |
+| POST | `/patients/{id}/games/{game_id}` | Log Game Attempt |
+| GET | `/progress/{patient_id}` | Get Progress Analytics |
+| POST | `/voice/tts` | Text-to-Speech |
+| GET | `/reports/{patient_id}` | Get AI Clinical Report |
+
+See **Swagger Docs** at `http://localhost:8000/docs` for complete API reference.
+
+---
+
+## 🧠 Key Features
+
+### Backend
+- ✅ **FastAPI** - Modern async Python web framework
+- ✅ **MongoDB** - NoSQL database with in-memory fallback
+- ✅ **JWT Authentication** - Secure token-based auth with role-based access control
+- ✅ **ML-Powered Adaptive System** - Dynamic difficulty adjustment based on performance
+- ✅ **Multilingual Support** - Hindi, Assamese, Kannada, English
+- ✅ **Text-to-Speech** - Audio generation for game instructions
+- ✅ **Clinical Reports** - AI-generated progress summaries
+- ✅ **Reminder System** - Scheduled medications, games, routines
+
+### Frontend
+- ✅ **React 19** - Latest React features
+- ✅ **Vite** - Lightning-fast dev server & build
+- ✅ **React Router** - Client-side navigation
+- ✅ **Responsive Design** - Mobile, tablet, desktop support
+- ✅ **Offline Support** - Works without internet (with IndexedDB caching)
+- ✅ **Real-time Updates** - WebSocket support for live data
+- ✅ **Accessibility** - WCAG 2.1 compliant components
+
+---
+
+## 🔐 Authentication Flow
+
+1. **Frontend:** User enters credentials on login page
+2. **Request:** POST `/auth/login` with username/password
+3. **Backend:** Validates credentials, generates JWT token
+4. **Response:** Returns token + user metadata
+5. **Frontend:** Stores token, includes in Authorization headers
+6. **Protected Routes:** Frontend guards routes, backend validates tokens
+
+---
+
+## 📊 Database Schema
+
+### Core Collections
+- **patients** - Elderly patient profiles (name, age, MMSE score, etc.)
+- **caregivers** - Caregiver accounts + patient associations
+- **game_attempts** - Game performance history
+- **sessions** - User sessions & activity tracking
+- **reminders** - Medication & gaming reminders
+- **progress_analytics** - Aggregated performance metrics
+
+---
+
+## 🚀 Deployment
+
+### Backend Deployment
+```bash
+# Using Uvicorn (Production)
+cd backend
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+
+# Using Docker
+docker build -t smrithi-backend .
+docker run -p 8000:8000 smrithi-backend
+```
+
+### Frontend Deployment
+```bash
+# Build for Production
+npm run frontend:build
+
+# Deploy 'frontend/dist' to any static host (Vercel, Netlify, AWS S3, etc.)
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** - see LICENSE file for details.
+
+---
+
+## 👥 Team
+
+**SMRITHI Development Team** - Smart India Hackathon 2026
+
+---
+
+## 📞 Support
+
+For issues, questions, or suggestions:
+- 📧 Email: smrithi.team@example.com
+- 🐛 GitHub Issues: [Report a Bug](https://github.com/deekshanayak-1108/Smrithi/issues)
+- 💬 Discussions: [Ask a Question](https://github.com/deekshanayak-1108/Smrithi/discussions)
+
+---
+
+**Made with ❤️ for Elderly Care in North East India**
 
 ---
 
