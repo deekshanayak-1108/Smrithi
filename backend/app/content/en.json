@@ -1,0 +1,9 @@
+{
+  "welcome": "Welcome to Smrithi.",
+  "start_game": "Let's start the game.",
+  "remember_objects": "Remember these objects.",
+  "select_object": "Select the object you remember.",
+  "correct": "Correct! Well done.",
+  "wrong": "That's okay. Try again.",
+  "game_complete": "Game completed. Well done!"
+}
