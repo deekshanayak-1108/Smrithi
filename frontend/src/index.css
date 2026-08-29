@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Premium Harmonious Color Palette */
+  --bg-color: #eaf5ea;
+  --sidebar-bg: #f2fbf2;
+  --surface-color: #ffffff;
+  --border-color: #d2ebd4;
+
+  --primary-green: #1e6535;
+  --primary-green-rgb: 30, 101, 53;
+  --hover-green: #134722;
+  --secondary-green: #d4e8d4;
+  --secondary-hover: #c4dcc4;
+
+  --text-main: #142418;
+  --text-muted: #526356;
+  --text-white: #ffffff;
+
+  /* Status Colors */
+  --success-color: #2b7538;
+  --warning-orange: #a65e12;
+  --warning-bg: #fde7d3;
+
+  /* Typography */
+  --font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --bottom-nav-height: 76px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 8px 30px rgba(30, 101, 53, 0.04);
+  --shadow-widget: 0 6px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* ── Reset ─────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Layout Shell ───────────────────────────────────────────────── */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* Space for sticky utility bar */
+}
+
+.content-area {
+  flex: 1;
+  padding: 36px 40px;
+  width: 100%;
+}
+
+/* ── Sidebar – desktop only ─────────────────────────────────────── */
+.sidebar-desktop {
+  display: flex; /* visible on desktop */
+  flex-shrink: 0;
+}
+
+/* ── Utility bar (bell / settings / avatar) – desktop only ─────── */
+.utility-bar {
+  display: flex; /* visible on desktop */
+}
+
+/* ── Bottom navigation – mobile only ───────────────────────────── */
+.bottom-nav-mobile {
+  display: none; /* hidden on desktop */
+}
+
+/* ── Mobile breakpoint (< 768 px) ──────────────────────────────── */
+@media (max-width: 767px) {
+  /* Hide sidebar on mobile */
+  .sidebar-desktop {
+    display: none !important;
+  }
+
+  /* Hide utility bar on mobile */
+  .utility-bar {
+    display: none !important;
+  }
+
+  /* Show bottom nav on mobile */
+  .bottom-nav-mobile {
+    display: flex !important;
+  }
+
+  /* Ensure content doesn't hide behind fixed bottom nav */
+  .content-area {
+    padding: 20px 16px;
+    padding-bottom: calc(var(--bottom-nav-height) + 24px);
+  }
+
+  /* Stack layout vertically on mobile */
+  .app-container {
+    flex-direction: column;
+  }
+}
+
+/* ── Tablet (768–1023 px) – sidebar still visible ──────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .content-area {
+    padding: 24px 28px;
+  }
+}
+
+/* ── Base element resets ────────────────────────────────────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ── Shared card ────────────────────────────────────────────────── */
+.smr-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+/* ── Button variants ────────────────────────────────────────────── */
+.btn-primary {
+  background-color: var(--primary-green);
+  color: var(--text-white);
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  min-height: 52px;
+  box-shadow: 0 4px 12px rgba(30, 101, 53, 0.15);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: var(--hover-green);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-green);
+  color: var(--primary-green);
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.05rem;
+  min-height: 52px;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background-color: var(--secondary-hover);
+}
+
+/* ── Category badges ────────────────────────────────────────────── */
+.badge-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.badge-recognition { background-color: var(--warning-bg); color: var(--warning-orange); }
+.badge-sequential   { background-color: #d4ebd8; color: #1e6535; }
+.badge-auditory     { background-color: #e2ede4; color: #4a6652; }
+.badge-pattern      { background-color: var(--primary-green); color: var(--text-white); }
+
+/* ── Utility classes ────────────────────────────────────────────── */
+.text-xs  { font-size: 0.75rem; }
+.text-sm  { font-size: 0.875rem; }
+.text-base{ font-size: 1rem; }
+.text-lg  { font-size: 1.125rem; }
+.text-xl  { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+.font-normal  { font-weight: 400; }
+.font-medium  { font-weight: 500; }
+.font-semibold{ font-weight: 600; }
+.font-bold    { font-weight: 700; }
